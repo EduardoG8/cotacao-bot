@@ -79,3 +79,8 @@ docker run -p 8000:8000 cotacao-bot
 ## Equipe
 
 _(nomes dos integrantes)_
+Eduardo lima de souza
+Bruno Raphael Oliveira Pinheiro
+Lucas Cavalcante Oliveira
+Flavio richard
+Jonathan Coelho de Araújo
