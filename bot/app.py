@@ -40,7 +40,7 @@ def create_app() -> Flask:
 
     @app.get("/health")
     def health():
-        return jsonify(status="erro")
+        return jsonify(status="ok")
 
     @app.get("/cotacao")
     @app.get("/cotacao/<origem>/<destino>")
