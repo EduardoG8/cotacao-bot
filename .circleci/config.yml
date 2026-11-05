@@ -1,0 +1,64 @@
+version: 2.1
+
+jobs:
+  build-test:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pip-{{ checksum "requirements.txt" }}
+      - run:
+          name: Instalar dependências
+          command: pip install -r requirements.txt
+      - save_cache:
+          key: pip-{{ checksum "requirements.txt" }}
+          paths:
+            - ~/.cache/pip
+      - run:
+          name: Linter (ruff)
+          command: ruff check .
+      - run:
+          name: Testes (pytest)
+          command: pytest -v
+
+  docker-publish:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build e push da imagem
+          command: |
+            IMAGEM="$DOCKERHUB_USER/cotacao-bot"
+            docker build -t "$IMAGEM:$CIRCLE_SHA1" -t "$IMAGEM:latest" .
+            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin
+            docker push "$IMAGEM:$CIRCLE_SHA1"
+            docker push "$IMAGEM:latest"
+
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: Disparar deploy (deploy hook)
+          command: curl -fsS -X POST "$DEPLOY_HOOK_URL"
+
+workflows:
+  ci-cd:
+    jobs:
+      - build-test
+      - docker-publish:
+          requires:
+            - build-test
+          filters:
+            branches:
+              only: main
+      - deploy:
+          requires:
+            - docker-publish
+          filters:
+            branches:
+              only: main
