@@ -68,7 +68,7 @@ docker run -p 8000:8000 cotacao-bot
 2. Copie o **Deploy Hook** do serviço e cadastre como `DEPLOY_HOOK_URL` no CircleCI.
 3. A cada push na `main`, o pipeline publica a imagem e chama o hook, que atualiza o container.
 
-**URL da aplicação publicada:** _(preencher após o deploy)_
+**URL da aplicação publicada:** (https://cotacao-bot-latest.onrender.com)
 
 ## Demonstração (falha provocada e correção)
 
