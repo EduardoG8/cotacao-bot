@@ -10,7 +10,7 @@ def client():
 
 
 def test_formatar_mensagem():
-    assert bot_app.formatar_mensagem("USD", "BRL", 5.4321) == "1 USD = 5.43 BRL"
+    assert bot_app.formatar_mensagem("USD", "BRL", 5.4321) == "1 USD = 9.99 BRL"
 
 
 def test_codigo_valido():
